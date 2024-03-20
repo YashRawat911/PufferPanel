@@ -1,27 +1,8 @@
-# Use an official Ubuntu as a parent image
-FROM ubuntu:latest
+# Start with the `fredblgr/ubuntu-novnc:20.04` image
+FROM fredblgr/ubuntu-novnc:20.04
 
-# Set environment variables
-ENV DEBIAN_FRONTEND=noninteractive
+# Expose the container's port 80 to the host
+EXPOSE 8000
 
-# Update Ubuntu packages and install dependencies
-RUN apt-get update && apt-get install -y \
-    curl \
-    sudo \
-    expect
-
-# Install PufferPanel
-RUN curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | sudo bash
-RUN sudo apt-get install -y pufferpanel
-
-# Copy expect script for user creation
-COPY create_admin.expect /tmp/
-
-# Run the expect script to add an admin user
-RUN sudo expect /tmp/create_admin.expect
-
-# Expose ports
-EXPOSE 8080 5657
-
-# Start the panel
-CMD ["sudo", "systemctl", "enable", "--now", "pufferpanel"]
+# Start the 'tightvncserver' and 'novnc'
+CMD tightvncserver :1 -geometry 1024x768 -depth 24 & novnc
