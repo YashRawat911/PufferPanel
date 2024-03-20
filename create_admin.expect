@@ -1,0 +1,19 @@
+#!/usr/bin/expect -f
+
+set timeout 10
+
+spawn sudo pufferpanel user add
+
+expect "Username:"
+send "admin\r"
+
+expect "Email:"
+send "admin@example.com\r"
+
+expect "Password:"
+send "yourpassword\r"
+
+expect "Is this an administrator? (y/N):"
+send "Y\r"
+
+expect eof
